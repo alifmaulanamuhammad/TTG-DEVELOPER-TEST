@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cari Nomor yang Hilang</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Cari Nomor yang Hilang</h2>
+    <label for="inputArray">Masukkan angka yang berurutan (pisahkan dengan koma):</label>
+    <input type="text" id="inputArray" placeholder="Contoh: 1, 2, 3, 5, 6">
+    <button onclick="findMissingNumber()">Cari Nomor yang Hilang</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function findMissingNumber() {
+      const input = document.getElementById('inputArray').value;
+      const arr = input.split(',').map(num => parseInt(num.trim()));
+
+      // Pastikan array sudah terurut
+      arr.sort((a, b) => a - b);
+
+      // Jika array kurang dari 2 elemen, tidak bisa dicari
+      if (arr.length < 2) {
+        document.getElementById('result').innerHTML = "Array terlalu kecil, tidak bisa mencari nomor yang hilang.";
+        return;
+      }
+
+      const n = arr.length;
+      const min = arr[0]; // Nilai terkecil (elemen pertama)
+      const max = arr[n - 1]; // Nilai terbesar (elemen terakhir)
+
+      // Jumlah total yang seharusnya ada dalam deret
+      const expectedSum = ((min + max) * (n + 1)) / 2;
+
+      // Jumlah yang ada dalam array
+      const actualSum = arr.reduce((sum, num) => sum + num, 0);
+
+      // Nomor yang hilang
+      const missingNumber = expectedSum - actualSum;
+
+      if (missingNumber === 0) {
+        document.getElementById('result').innerHTML = "Tidak ada nomor yang hilang.";
+      } else {
+        document.getElementById('result').innerHTML = `Nomor yang hilang adalah: ${missingNumber}`;
+      }
+    }
+  </script>
+</body>
+</html>

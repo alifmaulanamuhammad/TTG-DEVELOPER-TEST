@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hitung Menggunakan Operator dengan </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+
+      width: 200%;
+      max-width: 600px;
+    }
+    h2 {
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      
+    }
+    button {
+      width: 50%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Cari Cara Menghitung Angka dengan Operator (+, -, *)</h2>
+    <label for="inputNumbers">Masukkan daftar angka (pisahkan dengan koma):</label>
+    <input type="text" id="inputNumbers" placeholder="Contoh: 2, 3, 5, 7">
+    
+    <label for="targetNumber">Masukkan angka target:</label>
+    <input type="number" id="targetNumber" placeholder="Target angka">
+    
+    <button onclick="findOperations()">hitung</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    // Fungsi untuk mencari cara menghitung target menggunakan operator +, -, *
+    function findOperations() {
+      const inputNumbers = document.getElementById('inputNumbers').value;
+      const target = parseInt(document.getElementById('targetNumber').value);
+      
+      // Mengubah input menjadi array angka
+      const numbers = inputNumbers.split(',').map(num => parseInt(num.trim()));
+
+      if (numbers.length === 0 || isNaN(target)) {
+        document.getElementById('result').innerHTML = "Masukkan daftar angka dan target yang valid.";
+        return;
+      }
+
+      let results = [];
+      
+      // Fungsi untuk mencari semua kombinasi operator yang menghasilkan target
+      function findCombinations(nums, target, currentExpr = '') {
+        if (nums.length === 0) {
+          return;
+        }
+        
+        // Menambahkan angka pertama ke ekspresi
+        let num = nums[0];
+        let remaining = nums.slice(1);
+        
+        // Mengecek semua kemungkinan operasi: tambah, kurang, kali
+        if (remaining.length === 0) {
+          // Jika ini angka terakhir
+          if (eval(currentExpr + num) === target) {
+            results.push(currentExpr + num);
+          }
+        } else {
+          // Operasi penjumlahan
+          findCombinations(remaining, target, currentExpr + num + ' + ');
+          // Operasi pengurangan
+          findCombinations(remaining, target, currentExpr + num + ' - ');
+          // Operasi perkalian
+          findCombinations(remaining, target, currentExpr + num + ' * ');
+        }
+      }
+
+      // Mulai pencarian kombinasi
+      findCombinations(numbers, target, '');
+
+      // Menampilkan hasil
+      if (results.length > 0) {
+        document.getElementById('result').innerHTML = "Cara menghitung yang ditemukan:<br>" + results.join('<br>');
+      } else {
+        document.getElementById('result').innerHTML = "Tidak ada cara menghitung yang ditemukan untuk target ini.";
+      }
+    }
+  </script>
+</body>
+</html>
